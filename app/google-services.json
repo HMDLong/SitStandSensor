@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "315812453989",
+    "project_id": "gravity-sensor",
+    "storage_bucket": "gravity-sensor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315812453989:android:a97feb39ceb80a91c4f08c",
+        "android_client_info": {
+          "package_name": "com.example.gravsensor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315812453989-farvdopq8h5kauiejaqe2t1surfnqlva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZacw_B5kYfW2zKDmh1uMOtYcDmOFLMWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315812453989-farvdopq8h5kauiejaqe2t1surfnqlva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

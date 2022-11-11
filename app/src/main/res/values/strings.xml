@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GravSensor</string>
+    <string-array name="collections">
+        <item>sit</item>
+        <item>stand</item>
+        <item>stand_up</item>
+        <item>sit_down</item>
+    </string-array>
+
+    <string name="spn_label">Save to</string>
+    <string name="stat_txt_label">Stats</string>
+    <string name="count_label">Record Counts</string>
+    <string name="category_label">Category</string>
+</resources>
