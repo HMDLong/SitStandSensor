@@ -2,12 +2,13 @@ package com.example.gravsensor.ui.main
 
 import android.content.Context
 import android.hardware.SensorEventListener
+import com.example.gravsensor.session.RecordSession
 
 interface SensorContract {
     interface View {
         fun onSendDataSuccess(itemCount : Int)
         fun onFail(e : Exception)
-        fun onBatchLimitReached()
+        fun onAutoStopReached()
     }
 
     interface Presenter {
@@ -16,7 +17,10 @@ interface SensorContract {
         fun stopRecording()
         fun isRecording() : Boolean
         fun saveRecording()
-        fun changeRecordConfig(standOrSit : Int? = null)
+        fun changeRecordConfig(
+            standOrSit : RecordSession.Activity? = null,
+            isAutoStopEnabled : Boolean? = null
+        )
 
         fun registerSensor(sensorType : Int, listener : SensorEventListener)
         fun clearSession()

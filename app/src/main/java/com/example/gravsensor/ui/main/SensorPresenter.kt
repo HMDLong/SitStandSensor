@@ -27,6 +27,11 @@ class SensorPresenter @Inject constructor(private val repository : DataRepositor
 
     override fun createSession(context : Context){
         session = RecordSession.getInstance(context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager)
+        session.autoStopListener = object : RecordSession.AutoStopListener {
+            override fun onAutoStop() {
+                _view?.onAutoStopReached()
+            }
+        }
     }
 
     override fun startRecording() {
@@ -34,7 +39,7 @@ class SensorPresenter @Inject constructor(private val repository : DataRepositor
     }
 
     override fun stopRecording() {
-        session.stopRecord(repository.remoteSource, resultListener)
+        session.stopRecord()
     }
 
     override fun isRecording() = session.recording
@@ -43,9 +48,15 @@ class SensorPresenter @Inject constructor(private val repository : DataRepositor
         session.saveRecord(repository.remoteSource, resultListener)
     }
 
-    override fun changeRecordConfig(standOrSit : Int?) {
+    override fun changeRecordConfig(
+        standOrSit: RecordSession.Activity?,
+        isAutoStopEnabled: Boolean?
+    ) {
         standOrSit?.let {
             session.standOrSit = standOrSit
+        }
+        isAutoStopEnabled?.let {
+            session.autoStopEnabled = isAutoStopEnabled
         }
     }
 

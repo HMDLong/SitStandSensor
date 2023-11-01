@@ -1,14 +1,25 @@
 <resources>
     <string name="app_name">GravSensor</string>
     <string-array name="collections">
-        <item>sit</item>
-        <item>stand</item>
-        <item>stand_up</item>
-        <item>sit_down</item>
+        <item>shirt_front</item>
+        <item>jacket_front</item>
+<!--        <item>stand_up</item>-->
+<!--        <item>sit_down</item>-->
+        <item>jacket_side</item>
+        <item>pant_side</item>
     </string-array>
 
     <string name="spn_label">Save to</string>
     <string name="stat_txt_label">Stats</string>
     <string name="count_label">Record Counts</string>
     <string name="category_label">Category</string>
+
+    <string name="btn_sit_label">Sit</string>
+    <string name="btn_stand_label">Stand</string>
+    <string name="btn_move_label">Moving</string>
+<!--    <string name="btn_stand_up_label">Standup</string>-->
+<!--    <string name="btn_sit_down_label">Sitdown</string>-->
+
+    <string name="btn_save_label">Save</string>
+    <string name="toggle_auto_stop_label">Auto-stop after 10s</string>
 </resources>

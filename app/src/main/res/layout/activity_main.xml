@@ -6,28 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity"
     android:gravity="center"
-    android:padding="20dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        android:weightSum="2">
-        <TextView
-            android:layout_weight="1"
-            android:labelFor="@id/spn_collections"
-            android:text="@string/spn_label"
-            android:textStyle="bold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-        <Spinner
-            android:layout_weight="1"
-            android:id="@+id/spn_collections"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textDirection="rtl"/>
-    </LinearLayout>
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,6 +56,27 @@
         android:weightSum="2">
         <TextView
             android:layout_weight="1"
+            android:labelFor="@id/spn_collections"
+            android:text="@string/spn_label"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:layout_weight="1"
+            android:id="@+id/spn_collections"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textDirection="rtl"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:weightSum="2">
+        <TextView
+            android:layout_weight="1"
             android:text="@string/category_label"
             android:textStyle="bold"
             android:layout_width="0dp"
@@ -98,40 +98,80 @@
         android:gravity="center">
         <Button
             android:id="@+id/btn_stand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:minHeight="50dp"
-            android:minWidth="70dp"
-            android:text="Stand"/>
+            android:minWidth="60dp"
+            android:text="@string/btn_stand_label"/>
+        <Button
+            android:id="@+id/btn_stand_up"
+            android:textSize="11sp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:minHeight="50dp"
+            android:minWidth="60dp"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="@color/teal_700"
+            android:text="@string/btn_move_label"/>
         <Button
             android:id="@+id/btn_sit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:minHeight="50dp"
-            android:minWidth="70dp"
+            android:minWidth="60dp"
             android:layout_marginStart="10dp"
-            android:text="Sit"/>
+            android:text="@string/btn_sit_label"/>
+<!--        <Button-->
+<!--            android:id="@+id/btn_sit_down"-->
+<!--            android:textSize="11sp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:minHeight="50dp"-->
+<!--            android:minWidth="60dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:text="@string/btn_sit_down_label"/>-->
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="10dp">
         <Button
             android:id="@+id/btn_start_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="70dp"
-            android:layout_marginEnd="10dp"/>
+            android:minHeight="80dp"
+            android:minWidth="100dp"
+            android:layout_marginEnd="20dp"/>
         <Button
             android:id="@+id/btn_save"
-            android:text="Save"
+            android:text="@string/btn_save_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="70dp"/>
+            android:minHeight="80dp"
+            android:minWidth="100dp"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toggle_auto_stop_label"/>
+        <ToggleButton
+            android:id="@+id/tgb_auto_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
+
 
 </LinearLayout>

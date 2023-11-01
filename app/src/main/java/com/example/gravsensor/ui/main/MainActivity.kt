@@ -11,8 +11,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gravsensor.R
 import com.example.gravsensor.databinding.ActivityMainBinding
+import com.example.gravsensor.session.RecordSession
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.absoluteValue
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SensorContract.View {
@@ -24,6 +26,9 @@ class MainActivity : AppCompatActivity(), SensorContract.View {
     var linX = 0F
     var linY = 0F
     var linZ = 0F
+    var rotX = 0F
+    var rotY = 0F
+    var rotZ = 0F
 
     private val linSensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent?) {
@@ -43,6 +48,19 @@ class MainActivity : AppCompatActivity(), SensorContract.View {
             //TODO("Not yet implemented")
         }
     }
+    private val rotSensorListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent?) {
+            updateRot(event?.values)
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+            //TODO("Not yet implemented")
+        }
+    }
+    private val dummySensorListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent?) {}
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    }
 
     @Inject
     lateinit var presenter : SensorPresenter
@@ -53,28 +71,46 @@ class MainActivity : AppCompatActivity(), SensorContract.View {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initData()
+        initView()
+    }
+
+    private fun initData(){
         presenter.setView(this)
+    }
+
+    private fun initView(){
         binding.apply {
-            txtStandSit.text = "Sit"
+            txtStandSit.text = getString(R.string.btn_sit_label)
             btnStand.setOnClickListener {
-                txtStandSit.text = "Stand"
-                presenter.changeRecordConfig(standOrSit = 1)
+                txtStandSit.text = getString(R.string.btn_stand_label)
+                presenter.changeRecordConfig(standOrSit = RecordSession.Activity.STAND)
             }
             btnSit.setOnClickListener {
-                txtStandSit.text = "Sit"
-                presenter.changeRecordConfig(standOrSit = 0)
+                txtStandSit.text = getString(R.string.btn_sit_label)
+                presenter.changeRecordConfig(standOrSit = RecordSession.Activity.SIT)
             }
-            btnStartStop.text = "Start"
-            btnStartStop.setOnClickListener {
-                if(presenter.isRecording()){
-                    spnCollections.isEnabled = true
-                    btnStartStop.text = "Start"
-                    presenter.stopRecording()
-                } else {
-                    spnCollections.isEnabled = false
-                    btnStartStop.text = "Stop"
-                    resetDataCount()
-                    presenter.startRecording()
+            btnStandUp.setOnClickListener {
+                txtStandSit.text = getString(R.string.btn_move_label)
+                presenter.changeRecordConfig(standOrSit = RecordSession.Activity.MOVE)
+            }
+//            btnSitDown.setOnClickListener {
+//                txtStandSit.text = getString(R.string.btn_sit_down_label)
+//                presenter.changeRecordConfig(standOrSit = RecordSession.Activity.SIT_DOWN)
+//            }
+            btnStartStop.apply {
+                text = "Start"
+                setOnClickListener {
+                    if(presenter.isRecording()){
+                        setElementsEnabled(true)
+                        text = "Start"
+                        presenter.stopRecording()
+                    } else {
+                        setElementsEnabled(false)
+                        resetDataCount()
+                        text = "Stop"
+                        presenter.startRecording()
+                    }
                 }
             }
             btnSave.setOnClickListener {
@@ -107,19 +143,29 @@ class MainActivity : AppCompatActivity(), SensorContract.View {
                             //TODO("Not yet implemented")
                         }
                     }
-                    this.setSelection(adapter.getPosition("stand"))
+                    this.setSelection(adapter.getPosition("sit"))
+                }
+            }
+            tgbAutoStop.apply {
+                isChecked = false
+                setOnCheckedChangeListener { _, isChecked ->
+                    presenter.changeRecordConfig(isAutoStopEnabled = isChecked)
                 }
             }
         }
         resetDataCount()
     }
 
+
     override fun onStart() {
         super.onStart()
         presenter.apply {
             createSession(this@MainActivity.applicationContext)
-            registerSensor(Sensor.TYPE_GYROSCOPE, sensorListener)
+            registerSensor(Sensor.TYPE_ACCELEROMETER, dummySensorListener)
+            registerSensor(Sensor.TYPE_MAGNETIC_FIELD, dummySensorListener)
+            registerSensor(Sensor.TYPE_GRAVITY, sensorListener)
             registerSensor(Sensor.TYPE_LINEAR_ACCELERATION, linSensorListener)
+//            registerSensor(Sensor.TYPE_ROTATION_VECTOR, rotSensorListener)
         }
     }
 
@@ -136,8 +182,11 @@ class MainActivity : AppCompatActivity(), SensorContract.View {
         Toast.makeText(this.applicationContext, e.message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onBatchLimitReached() {
-        binding.btnStartStop.text = "Start"
+    override fun onAutoStopReached() {
+        runOnUiThread {
+            setElementsEnabled(true)
+            binding.btnStartStop.text = "Start"
+        }
     }
 
     private fun update(values: FloatArray?) {
@@ -160,14 +209,33 @@ class MainActivity : AppCompatActivity(), SensorContract.View {
         updateText()
     }
 
+    private fun updateRot(values: FloatArray?) {
+        values?.let { rotValues ->
+            rotX = rotValues[0]
+            rotY = rotValues[1]
+            rotZ = rotValues[2]
+        }
+        updateText()
+    }
+
     private fun updateText(){
         binding.counts.text = "grav=$gravCount\nlin=$linCount"
-        binding.stats.text = "gravx=$gravX\ngravy=$gravY\ngravz=$gravZ\nlinx=$linX\nliny=$linY\nlinz=$linZ"
+        binding.stats.text = "gravX=$gravX gravY=$gravY gravZ=$gravZ\n" +
+                             "linX=$linX linY=$linY linz=$linZ\n" +
+                             "rotX=$rotX rotY=$rotY rotZ=$rotZ"
     }
 
     private fun resetDataCount(){
         linCount = 0
         gravCount = 0
         updateText()
+    }
+
+    private fun setElementsEnabled(isEnabled : Boolean){
+        binding.apply {
+            spnCollections.isEnabled = isEnabled
+            btnSave.isEnabled = isEnabled
+            tgbAutoStop.isEnabled = isEnabled
+        }
     }
 }
